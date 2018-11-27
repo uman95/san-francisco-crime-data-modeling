@@ -112,7 +112,14 @@ def load_dataset(path_to_dataset, time_of_day=True, weekend_flag=True, normalize
     """Return a tuple of two numpy arrays. Input features and target.
 
     Input features has N rows and the following columns:
-    Unix_time (1 columns),[Time_of_day (3 columns onehot)], Day_of_week (7 columns onehot), [Is_weekend (1 column)], District (10 columns onehot), geoloc (2 columns)
+    Unix_time (1 columns)
+    [Time_of_day (3 columns onehot)]
+    Day_of_week (7 columns onehot)
+    [Is_weekend (1 column)]
+    District (10 columns onehot)
+    geoloc (2 columns (long, lat))
+
+    The columns in square brackets will be abscent if their respective flags are set to False
 
     Target is a one hot encoding (dimension N x 39)
 

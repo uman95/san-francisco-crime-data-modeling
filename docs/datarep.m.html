@@ -1180,7 +1180,14 @@ table {
     <span class="sd">&quot;&quot;&quot;Return a tuple of two numpy arrays. Input features and target.</span>
 
 <span class="sd">    Input features has N rows and the following columns:</span>
-<span class="sd">    Unix_time (1 columns),[Time_of_day (3 columns onehot)], Day_of_week (7 columns onehot), [Is_weekend (1 column)], District (10 columns onehot), geoloc (2 columns)</span>
+<span class="sd">    Unix_time (1 columns)</span>
+<span class="sd">    [Time_of_day (3 columns onehot)]</span>
+<span class="sd">    Day_of_week (7 columns onehot)</span>
+<span class="sd">    [Is_weekend (1 column)]</span>
+<span class="sd">    District (10 columns onehot)</span>
+<span class="sd">    geoloc (2 columns (long, lat))</span>
+
+<span class="sd">    The columns in square brackets will be abscent if their respective flags are set to False</span>
 
 <span class="sd">    Target is a one hot encoding (dimension N x 39)</span>
 
@@ -1216,7 +1223,13 @@ table {
   
     <div class="desc"><p>Return a tuple of two numpy arrays. Input features and target.</p>
 <p>Input features has N rows and the following columns:
-Unix_time (1 columns),[Time_of_day (3 columns onehot)], Day_of_week (7 columns onehot), [Is_weekend (1 column)], District (10 columns onehot), geoloc (2 columns)</p>
+Unix_time (1 columns)
+[Time_of_day (3 columns onehot)]
+Day_of_week (7 columns onehot)
+[Is_weekend (1 column)]
+District (10 columns onehot)
+geoloc (2 columns (long, lat))</p>
+<p>The columns in square brackets will be abscent if their respective flags are set to False</p>
 <p>Target is a one hot encoding (dimension N x 39)</p>
 <hr />
 <p>Example Usage:
@@ -1228,7 +1241,14 @@ input_array, target = load_dataset("path/to/file/train.csv")</p></div>
     <span class="sd">&quot;&quot;&quot;Return a tuple of two numpy arrays. Input features and target.</span>
 
 <span class="sd">    Input features has N rows and the following columns:</span>
-<span class="sd">    Unix_time (1 columns),[Time_of_day (3 columns onehot)], Day_of_week (7 columns onehot), [Is_weekend (1 column)], District (10 columns onehot), geoloc (2 columns)</span>
+<span class="sd">    Unix_time (1 columns)</span>
+<span class="sd">    [Time_of_day (3 columns onehot)]</span>
+<span class="sd">    Day_of_week (7 columns onehot)</span>
+<span class="sd">    [Is_weekend (1 column)]</span>
+<span class="sd">    District (10 columns onehot)</span>
+<span class="sd">    geoloc (2 columns (long, lat))</span>
+
+<span class="sd">    The columns in square brackets will be abscent if their respective flags are set to False</span>
 
 <span class="sd">    Target is a one hot encoding (dimension N x 39)</span>
 

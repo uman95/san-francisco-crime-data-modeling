@@ -58,14 +58,17 @@ def _parse_data_to_onehot_encoding(datas_int, n_uniques):
     data_one_hot = np.eye(n_uniques)[datas_int]
     return data_one_hot
 
-def _encode_date_time(date_time, time_of_day=True):
+def _encode_date_time(date_time, time_of_day=True, extended=True):
     n = int(len(date_time))
     offset = datetime.datetime(2003, 1, 1, 0, 0, 0) # start of data collection
     offset = time.mktime(offset.timetuple()) # to prevent possible numerical overflow
+
+    date_time_mat = np.zeros((n, 1), dtype=np.float64)
     if time_of_day:
-        date_time_mat = np.zeros((n, 2), dtype=np.float64)
-    else:
-        date_time_mat = np.zeros((n, 1), dtype=np.float64)
+        tod = np.zeros((n, 1), dtype=np.float64)
+    if extended:
+        extended_repr = np.zeros((n, 4))
+
 
     for i, entry in enumerate(date_time):
         tuple_time = _get_dates(entry)
@@ -73,7 +76,15 @@ def _encode_date_time(date_time, time_of_day=True):
         date_time_mat[i, 0] = unix_time
         if time_of_day:
             x = _get_time_of_day(tuple_time)
-            date_time_mat[i, 1] = x
+            tod[i] = x
+        if extended:
+            extended_repr[i] = tuple_time[:4]
+
+    if time_of_day:
+        date_time_mat = np.hstack((date_time_mat, tod))
+    if extended:
+        date_time_mat = np.hstack((date_time_mat, extended_repr))
+
     return date_time_mat
 
 def _one_hot_encode_strings(input_array):
@@ -88,9 +99,9 @@ def _one_hot_encode_strings(input_array):
 
 
 
-def _design_matrix(pandas_frame, time_of_day=True, weekend_flag=True, normalized=True):
+def _design_matrix(pandas_frame, time_of_day, extended_time, weekend_flag, normalized):
     n = int(len(pandas_frame))
-    date = _encode_date_time(pandas_frame["Dates"], time_of_day)
+    date = _encode_date_time(pandas_frame["Dates"], time_of_day=time_of_day, extended=extended_time)
     day_of_week = _one_hot_encode_strings(pandas_frame["DayOfWeek"])
     if weekend_flag:
         is_weekend = (day_of_week[:, 2] == 1) | (day_of_week[:, 3] == 1)
@@ -106,10 +117,9 @@ def _design_matrix(pandas_frame, time_of_day=True, weekend_flag=True, normalized
         date[:, 0] = (date[:, 0] - date[:, 0].mean())/date[:, 0].std()
         geoloc = (geoloc - geoloc.mean(axis=0)) / geoloc.std(axis=0)
     features = np.hstack((date, day_of_week, district, geoloc))
-
     return features.astype(np.float32), crime.astype(np.int64)
 
-def load_dataset(path_to_dataset, time_of_day=True, weekend_flag=True, normalized=True):
+def load_dataset(path_to_dataset, time_of_day=True, weekend_flag=True, extended_time=True,  normalized=True):
     """Return a tuple of two numpy arrays. Input features and target.
 
     Input features has N rows and the following columns:<br>
@@ -129,7 +139,7 @@ def load_dataset(path_to_dataset, time_of_day=True, weekend_flag=True, normalize
     Example Usage:
     input_array, target = load_dataset("path/to/file/train.csv")"""
     data = pd.read_csv(path_to_dataset)
-    return _design_matrix(data, time_of_day=time_of_day, weekend_flag=weekend_flag, normalized=normalized)
+    return _design_matrix(data, time_of_day=time_of_day, weekend_flag=weekend_flag, extended_time=extended_time, normalized=normalized)
 
 
 if __name__ == "__main__":

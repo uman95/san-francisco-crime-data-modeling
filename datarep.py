@@ -103,7 +103,8 @@ def _design_matrix(pandas_frame, time_of_day=True, weekend_flag=True, normalized
     crime = _one_hot_encode_strings(pandas_frame["Category"])
 
     if normalized:
-        date[:, 0] = (date[:, 0] - date[:, 0])/date[:, 0].std()
+        date[:, 0] = (date[:, 0] - date[:, 0].mean())/date[:, 0].std()
+        geoloc = (geoloc - geoloc.mean(axis=0)) / geoloc.std(axis=0)
     features = np.hstack((date, day_of_week, district, geoloc))
 
     return features.astype(np.float32), crime.astype(np.int64)
@@ -135,4 +136,3 @@ if __name__ == "__main__":
     d = load_dataset("../data/train.csv")
     np.set_printoptions(threshold=np.nan)
     print(d[0][1300:1400, 2:10])
-

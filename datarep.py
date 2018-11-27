@@ -80,7 +80,7 @@ def _one_hot_encode_strings(input_array):
     uniques = list(np.unique(input_array))
     uniques.sort()
     n = len(input_array)
-    int_encoding = np.zeros((n), dtype=np.int64)
+    int_encoding = np.zeros((n), dtype=np.int)
     n = len(input_array)
     for i in range(n):
         int_encoding[i] = uniques.index(input_array[i])
@@ -106,7 +106,7 @@ def _design_matrix(pandas_frame, time_of_day=True, weekend_flag=True, normalized
         date[:, 0] = (date[:, 0] - date[:, 0])/date[:, 0].std()
     features = np.hstack((date, day_of_week, district, geoloc))
 
-    return features, crime
+    return features.astype(np.float32), crime.astype(np.int64)
 
 def load_dataset(path_to_dataset, time_of_day=True, weekend_flag=True, normalized=True):
     """Return a tuple of two numpy arrays. Input features and target.
@@ -135,3 +135,4 @@ if __name__ == "__main__":
     d = load_dataset("../data/train.csv")
     np.set_printoptions(threshold=np.nan)
     print(d[0][1300:1400, 2:10])
+
